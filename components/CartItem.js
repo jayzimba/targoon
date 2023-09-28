@@ -20,7 +20,7 @@ const CartItem = ({ item, onClicked }) => {
       <View>
         <Text style={{ fontSize: 23, fontWeight: "bold" }}>{item.name}</Text>
         <Text style={{ fontSize: 16, fontWeight: "400" }}>
-          ZMW {item.price}
+          ZMW {item.price * quantity}
         </Text>
       </View>
       <View>
