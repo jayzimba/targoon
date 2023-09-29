@@ -155,18 +155,18 @@ const Checkout = () => {
           style={styles.picker}
         >
           <Picker.Item label="Month" value="" />
-          <Picker.Item label="01" value="01" />
-          <Picker.Item label="02" value="02" />
-          <Picker.Item label="03" value="03" />
-          <Picker.Item label="04" value="04" />
-          <Picker.Item label="05" value="05" />
-          <Picker.Item label="06" value="06" />
-          <Picker.Item label="07" value="07" />
-          <Picker.Item label="08" value="08" />
-          <Picker.Item label="09" value="09" />
-          <Picker.Item label="10" value="10" />
-          <Picker.Item label="11" value="11" />
-          <Picker.Item label="12" value="12" />
+          <Picker.Item label="January" value="01" />
+          <Picker.Item label="February" value="02" />
+          <Picker.Item label="March" value="03" />
+          <Picker.Item label="April" value="04" />
+          <Picker.Item label="May" value="05" />
+          <Picker.Item label="June" value="06" />
+          <Picker.Item label="July" value="07" />
+          <Picker.Item label="Aungust" value="08" />
+          <Picker.Item label="September" value="09" />
+          <Picker.Item label="October" value="10" />
+          <Picker.Item label="November" value="11" />
+          <Picker.Item label="December" value="12" />
         </Picker>
         <Picker
           selectedValue={expiryYear}
@@ -174,15 +174,15 @@ const Checkout = () => {
           style={styles.picker}
         >
           <Picker.Item label="Year" value="" />
-          <Picker.Item label="22" value="22" />
-          <Picker.Item label="23" value="23" />
-          <Picker.Item label="24" value="24" />
-          <Picker.Item label="25" value="25" />
-          <Picker.Item label="26" value="26" />
-          <Picker.Item label="27" value="27" />
-          <Picker.Item label="28" value="28" />
-          <Picker.Item label="29" value="29" />
-          <Picker.Item label="30" value="30" />
+          <Picker.Item label="2022" value="22" />
+          <Picker.Item label="2023" value="23" />
+          <Picker.Item label="2024" value="24" />
+          <Picker.Item label="2025" value="25" />
+          <Picker.Item label="2026" value="26" />
+          <Picker.Item label="2027" value="27" />
+          <Picker.Item label="2028" value="28" />
+          <Picker.Item label="2029" value="29" />
+          <Picker.Item label="2030" value="30" />
         </Picker>
       </View>
       <Text style={styles.label}>CVC</Text>
