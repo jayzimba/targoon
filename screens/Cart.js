@@ -1,55 +1,72 @@
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useRoute } from "@react-navigation/native";
 import { FlatList } from "react-native-gesture-handler";
-import Item from "../components/Item";
-import Checkout from "./Checkout";
 import { MaterialIcons } from "@expo/vector-icons";
-import NumericInput from "react-native-numeric-input";
-import CartItem from "./../components/CartItem";
+import CartItem from "../components/CartItem";
 
 const Cart = ({ navigation }) => {
-  const route = useRoute();
-  const { clickedItems } = route.params;
+    const route = useRoute();
+    const { clickedItems } = route.params;
 
-  const renderItem = ({ item }) => <CartItem item={item} />;
-  return (
-    <View style={{ flex: 1, paddingHorizontal: 10, backgroundColor: "#fff" }}>
-      <FlatList
-        data={clickedItems}
-        keyExtractor={(clickedItems) => clickedItems.value}
-        renderItem={renderItem}
-        horizontal={false}
-        showsHorizontalScrollIndicator
-      />
+    const renderItem = ({ item }) => < CartItem item = { item }
+    />;
 
-      <View style={{ width: "100%", alignItems: "center", bottom: 20 }}>
-        <TouchableOpacity
-          style={styles.proceedButton}
-          onPress={() => navigation.navigate("Check out")}
-        >
-          <MaterialIcons name="payments" size={24} color="#fff" />
-          <Text style={{ fontSize: 18, color: "#fff", marginStart: 10 }}>
-            Proceed To Checkout
-          </Text>
-        </TouchableOpacity>
-      </View>
-    </View>
-  );
+    return ( <
+        View style = { styles.container } >
+        <
+        FlatList data = { clickedItems }
+        keyExtractor = {
+            (item) => item.id.toString() } // Assuming each item has a unique "id" property
+        renderItem = { renderItem }
+        horizontal = { false }
+        showsHorizontalScrollIndicator = { false }
+        />
+
+        <
+        View style = { styles.buttonContainer } >
+        <
+        TouchableOpacity style = { styles.proceedButton }
+        onPress = {
+            () => navigation.navigate("Checkout") } >
+        <
+        MaterialIcons name = "payment"
+        size = { 24 }
+        color = "#fff" / >
+        <
+        Text style = { styles.buttonText } > Proceed To Checkout < /Text> <
+        /TouchableOpacity> <
+        /View> <
+        /View>
+    );
 };
 
-export default Cart;
-
 const styles = StyleSheet.create({
-  proceedButton: {
-    flexDirection: "row",
-    paddingVertical: 15,
-    paddingHorizontal: 5,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "red",
-    width: "80%",
-    borderRadius: 10,
-    backgroundColor: "#000",
-  },
+    container: {
+        flex: 1,
+        paddingHorizontal: 10,
+        backgroundColor: "#fff",
+    },
+    buttonContainer: {
+        width: "100%",
+        alignItems: "center",
+        bottom: 20,
+    },
+    proceedButton: {
+        flexDirection: "row",
+        paddingVertical: 15,
+        paddingHorizontal: 5,
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: "#000", // Set the desired background color
+        width: "80%",
+        borderRadius: 10,
+    },
+    buttonText: {
+        fontSize: 18,
+        color: "#fff",
+        marginStart: 10,
+    },
 });
+
+export default Cart;
