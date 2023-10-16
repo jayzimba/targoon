@@ -194,8 +194,8 @@ const Checkout = () => {
         Picker.Item label = "2030"
         value = "30" / >
         <
-        /Picker> < /
-        View >
+        /Picker> <
+        /View>
 
         <
         Text style = { styles.label } > CVC < /Text> <
@@ -209,8 +209,7 @@ const Checkout = () => {
 
         <
         View style = {
-            { width: "100%", alignItems: "center", bottom: 20, marginVertical: 50 }
-        } >
+            { width: "100%", alignItems: "center", bottom: 20, marginVertical: 50 } } >
         <
         TouchableOpacity style = { styles.proceedButton }
         onPress = { handlePayment }
@@ -225,13 +224,12 @@ const Checkout = () => {
                 color = "#fff" / >
                 <
                 Text style = {
-                    { fontSize: 18, color: "#fff", marginStart: 10 }
-                } > Pay Now < /Text> < /
-                >
+                    { fontSize: 18, color: "#fff", marginStart: 10 } } > Pay Now < /Text> <
+                />
             )
         } <
-        /TouchableOpacity> < /
-        View > <
+        /TouchableOpacity> <
+        /View> <
         /View>
     );
 };
