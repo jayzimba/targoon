@@ -9,35 +9,25 @@ const Cart = ({ navigation }) => {
     const route = useRoute();
     const { clickedItems } = route.params;
 
-    const renderItem = ({ item }) => < CartItem item = { item }
-    />;
+    const renderItem = ({ item }) => <CartItem item={item} />;
 
-    return ( <
-        View style = { styles.container } >
-        <
-        FlatList data = { clickedItems }
-        keyExtractor = {
-            (item) => item.id.toString() } // Assuming each item has a unique "id" property
-        renderItem = { renderItem }
-        horizontal = { false }
-        showsHorizontalScrollIndicator = { false }
-        />
+    return (
+        <View style={styles.container}>
+            <FlatList
+                data={clickedItems}
+                keyExtractor={(item) => item.id.toString()} // Assuming each item has a unique "id" property
+                renderItem={renderItem}
+                horizontal={false}
+                showsHorizontalScrollIndicator={false}
+            />
 
-        <
-        View style = { styles.buttonContainer } >
-        <
-        TouchableOpacity style = { styles.proceedButton }
-        onPress = {
-            () => navigation.navigate("Checkout") } >
-        <
-        MaterialIcons name = "payment"
-        size = { 24 }
-        color = "#fff" / >
-        <
-        Text style = { styles.buttonText } > Proceed To Checkout < /Text> <
-        /TouchableOpacity> <
-        /View> <
-        /View>
+            <View style={styles.buttonContainer}>
+                <TouchableOpacity style={styles.proceedButton} onPress={() => navigation.navigate("Checkout")}>
+                    <MaterialIcons name="payment" size={24} color="#fff" />
+                    <Text style={styles.buttonText}>Proceed To Checkout</Text>
+                </TouchableOpacity>
+            </View>
+        </View>
     );
 };
 

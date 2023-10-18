@@ -28,7 +28,7 @@ const Checkout = () => {
         return year >= currentYear && year <= currentYear + 20;
     };
 
-    const authenticateWithBiometrics = async() => {
+    const authenticateWithBiometrics = async () => {
         const hasBiometrics = await LocalAuthentication.hasHardwareAsync();
         if (hasBiometrics) {
             const result = await LocalAuthentication.authenticateAsync({
@@ -89,148 +89,64 @@ const Checkout = () => {
         }
     };
 
-    return ( <
-        View style = { styles.container } >
-        <
-        Text style = { styles.header } > Enter Card Details < /Text> <
-        CardField postalCodeEnabled = { false }
-        onCardChange = {
-            (cardDetails) => {
+    return (
+        <View style={styles.container}>
+            <Text style={styles.header}>Enter Card Details</Text>
+            <CardField postalCodeEnabled={false} onCardChange={(cardDetails) => {
                 handleCardNumberChange(cardDetails.number);
                 setCvc(cardDetails.cvc);
-            }
-        }
-        />
+            }} />
 
-        <
-        Text style = { styles.label } > Card Number < /Text> <
-        TextInput style = { styles.input }
-        value = { cardNumber }
-        onChangeText = { handleCardNumberChange }
-        placeholder = "Card Number"
-        keyboardType = "numeric"
-        secureTextEntry = { false }
-        />
+            <Text style={styles.label}>Card Number</Text>
+            <TextInput style={styles.input} value={cardNumber} onChangeText={handleCardNumberChange} placeholder="Card Number" keyboardType="numeric" secureTextEntry={false} />
 
-        <
-        Text style = { styles.label } > Expiry < /Text> <
-        View style = { styles.expiryContainer } >
-        <
-        Picker selectedValue = { expiryMonth }
-        onValueChange = { handleExpiryMonthChange }
-        style = { styles.picker } >
-        <
-        Picker.Item label = "Month"
-        value = "" / >
-        <
-        Picker.Item label = "January"
-        value = "01" / >
-        <
-        Picker.Item label = "February"
-        value = "02" / >
-        <
-        Picker.Item label = "March"
-        value = "03" / >
-        <
-        Picker.Item label = "April"
-        value = "04" / >
-        <
-        Picker.Item label = "May"
-        value = "05" / >
-        <
-        Picker.Item label = "June"
-        value = "06" / >
-        <
-        Picker.Item label = "July"
-        value = "07" / >
-        <
-        Picker.Item label = "August"
-        value = "08" / >
-        <
-        Picker.Item label = "September"
-        value = "09" / >
-        <
-        Picker.Item label = "October"
-        value = "10" / >
-        <
-        Picker.Item label = "November"
-        value = "11" / >
-        <
-        Picker.Item label = "December"
-        value = "12" / >
-        <
-        /Picker> <
-        Picker selectedValue = { expiryYear }
-        onValueChange = { handleExpiryYearChange }
-        style = { styles.picker } >
-        <
-        Picker.Item label = "Year"
-        value = "" / >
-        <
-        Picker.Item label = "2022"
-        value = "22" / >
-        <
-        Picker.Item label = "2023"
-        value = "23" / >
-        <
-        Picker.Item label = "2024"
-        value = "24" / >
-        <
-        Picker.Item label = "2025"
-        value = "25" / >
-        <
-        Picker.Item label = "2026"
-        value = "26" / >
-        <
-        Picker.Item label = "2027"
-        value = "27" / >
-        <
-        Picker.Item label = "2028"
-        value = "28" / >
-        <
-        Picker.Item label = "2029"
-        value = "29" / >
-        <
-        Picker.Item label = "2030"
-        value = "30" / >
-        <
-        /Picker> <
-        /View>
+            <Text style={styles.label}>Expiry</Text>
+            <View style={styles.expiryContainer}>
+                <Picker selectedValue={expiryMonth} onValueChange={handleExpiryMonthChange} style={styles.picker}>
+                    <Picker.Item label="Month" value="" />
+                    <Picker.Item label="January" value="01" />
+                    <Picker.Item label="February" value="02" />
+                    <Picker.Item label="March" value="03" />
+                    <Picker.Item label="April" value="04" />
+                    <Picker.Item label="May" value="05" />
+                    <Picker.Item label="June" value="06" />
+                    <Picker.Item label="July" value="07" />
+                    <Picker.Item label="August" value="08" />
+                    <Picker.Item label="September" value="09" />
+                    <Picker.Item label="October" value="10" />
+                    <Picker.Item label="November" value="11" />
+                    <Picker.Item label="December" value="12" />
+                </Picker>
+                <Picker selectedValue={expiryYear} onValueChange={handleExpiryYearChange} style={styles.picker}>
+                    <Picker.Item label="Year" value="" />
+                    <Picker.Item label="2022" value="22" />
+                    <Picker.Item label="2023" value="23" />
+                    <Picker.Item label="2024" value="24" />
+                    <Picker.Item label="2025" value="25" />
+                    <Picker.Item label="2026" value="26" />
+                    <Picker.Item label="2027" value="27" />
+                    <Picker.Item label="2028" value="28" />
+                    <Picker.Item label="2029" value="29" />
+                    <Picker.Item label="2030" value="30" />
+                </Picker>
+            </View>
 
-        <
-        Text style = { styles.label } > CVC < /Text> <
-        TextInput style = { styles.input }
-        value = { cvc }
-        onChangeText = { setCvc }
-        placeholder = "CVC"
-        keyboardType = "numeric"
-        secureTextEntry = { true }
-        />
+            <Text style={styles.label}>CVC</Text>
+            <TextInput style={styles.input} value={cvc} onChangeText={setCvc} placeholder="CVC" keyboardType="numeric" secureTextEntry={true} />
 
-        <
-        View style = {
-            { width: "100%", alignItems: "center", bottom: 20, marginVertical: 50 } } >
-        <
-        TouchableOpacity style = { styles.proceedButton }
-        onPress = { handlePayment }
-        disabled = { loadingIndicator } > {
-            loadingIndicator ? ( <
-                ActivityIndicator color = "#fff" / >
-            ) : ( <
-                >
-                <
-                MaterialIcons name = "payments"
-                size = { 24 }
-                color = "#fff" / >
-                <
-                Text style = {
-                    { fontSize: 18, color: "#fff", marginStart: 10 } } > Pay Now < /Text> <
-                />
-            )
-        } <
-        /TouchableOpacity> <
-        /View> <
-        /View>
+            <View style={{ width: "100%", alignItems: "center", bottom: 20, marginVertical: 50 }}>
+                <TouchableOpacity style={styles.proceedButton} onPress={handlePayment} disabled={loadingIndicator}>
+                    {loadingIndicator ? (
+                        <ActivityIndicator color="#fff" />
+                    ) : (
+                        <>
+                            <MaterialIcons name="payments" size={24} color="#fff" />
+                            <Text style={{ fontSize: 18, color: "#fff", marginStart: 10 }}>Pay Now</Text>
+                        </>
+                    )}
+                </TouchableOpacity>
+            </View>
+        </View>
     );
 };
 
