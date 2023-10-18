@@ -19,7 +19,7 @@ export default function App() {
       <Stack.Navigator>
         <Stack.Screen name="Home" component={Home} />
         <Stack.Screen name="Item" component={Item} />
-        <Stack.Screen name="Check out" component={Checkout} />
+        <Stack.Screen name="Checkout" component={Checkout} />
         <Stack.Screen name="Cart" component={Cart} />
         <Stack.Screen name="Verification" component={Verification} />
         <Stack.Screen name="Order Complete" component={OrderComplete} />

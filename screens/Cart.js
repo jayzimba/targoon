@@ -5,7 +5,7 @@ import { FlatList } from "react-native-gesture-handler";
 import { MaterialIcons } from "@expo/vector-icons";
 import CartItem from "../components/CartItem";
 
-const Cart = ({ navigation }) => {
+const Cart = ({ navigation }) => { 
     const route = useRoute();
     const { clickedItems } = route.params;
 
@@ -15,7 +15,7 @@ const Cart = ({ navigation }) => {
         <View style={styles.container}>
             <FlatList
                 data={clickedItems}
-                keyExtractor={(item) => item.id.toString()} // Assuming each item has a unique "id" property
+                keyExtractor={(item, index) => index.toString()}
                 renderItem={renderItem}
                 horizontal={false}
                 showsHorizontalScrollIndicator={false}
