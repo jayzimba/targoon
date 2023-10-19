@@ -9,7 +9,7 @@ import {
   FlatList,
 } from "react-native";
 import { Feather, Ionicons, MaterialIcons } from "@expo/vector-icons";
-import { RectButton } from "react-native-gesture-handler"; // Assuming you meant RectButton instead of TouchableOpacity
+import { RectButton } from "react-native-gesture-handler";
 import Item from "../components/Item";
 
 const Home = ({ navigation }) => {
@@ -26,7 +26,6 @@ const Home = ({ navigation }) => {
     if (!clickedItems.some((clickedItem) => clickedItem.value === item.value)) {
       setClickedItems((prevClickedItems) => [...prevClickedItems, item]);
       setCartCounter((prev) => prev + 1);
-      // Add your logic here or perform any actions you need.
     }
   };
 
@@ -36,9 +35,9 @@ const Home = ({ navigation }) => {
 
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-      <View style={{ flexDirection: "row", justifyContent: "space-between", paddingVertical: 15 }}>
+      <View style={styles.headerContainer}>
         <View></View>
-        <RectButton style={{ alignItems: "center", flexDirection: "row" }} onPress={() => navigation.navigate("Cart", { clickedItems })}>
+        <RectButton style={styles.cartButton} onPress={() => navigation.navigate("Cart", { clickedItems })}>
           {cartCounter >= 1 ? (
             <View style={styles.cartBadge}>
               <Text style={styles.cartBadgeText}>{cartCounter}</Text>
@@ -50,36 +49,72 @@ const Home = ({ navigation }) => {
 
       <Text style={styles.headerText}>Categories</Text>
 
-      <View style={{ alignItems: "center", flexDirection: "row", justifyContent: "space-between", marginHorizontal: 15 }}>
-        <View style={styles.container2}>
-          <RectButton style={styles.category}>
+      <View style={styles.categoriesContainer}>
+        <View style={styles.category}>
+          <RectButton style={styles.categoryButton}>
             <Ionicons name="phone-portrait-outline" size={30} color="black" />
           </RectButton>
-          <Text style={styles.textInContainer}>Phones</Text>
+          <Text style={styles.textInCategory}>Phones</Text>
         </View>
 
-        <View style={styles.container2}>
-          <RectButton style={styles.category}>
+        <View style={styles.category}>
+          <RectButton style={styles.categoryButton}>
             <MaterialIcons name="laptop-mac" size={30} color="black" />
           </RectButton>
-          <Text style={styles.textInContainer}>Computers</Text>
+          <Text style={styles.textInCategory}>Computers</Text>
         </View>
 
-        <View style={styles.container2}>
-          <RectButton style={styles.category}>
+        <View style={styles.category}>
+          <RectButton style={styles.categoryButton}>
             <Ionicons name="md-headset-sharp" size={30} color="black" />
           </RectButton>
-          <Text style={styles.textInContainer}>Accessories</Text>
+          <Text style={styles.textInCategory}>Accessories</Text>
         </View>
       </View>
 
       <Text style={styles.headerText}>Latest</Text>
 
-      <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginBottom: 30 }}>
-        {/* Add your ImageBackground components here */}
+      <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.bannersContainer}>
+        {/* Add your ImageBackground components here for the banners */}
+        {/* Banner 1 */}
+        <View style={styles.bannerContainer}>
+          <ImageBackground
+            source={require('../assets/images/var.jpg')}
+            style={styles.banner}
+          >
+            {/* You can add any child components or text within the ImageBackground if needed */}
+          </ImageBackground>
+        </View>
+
+        {/* Banner 2 */}
+        <View style={styles.bannerContainer}>
+          <ImageBackground
+            source={require('../assets/images/pixel.jpg')}
+            style={styles.banner}
+          >
+            {/* You can add any child components or text within the ImageBackground if needed */}
+          </ImageBackground>
+        </View>
+
+        {/* Banner 3 */}
+        <View style={styles.bannerContainer}>
+          <ImageBackground
+            source={require('../assets/images/mac.jpg')}
+            style={styles.banner}
+          >
+            {/* You can add any child components or text within the ImageBackground if needed */}
+          </ImageBackground>
+        </View>
       </ScrollView>
 
-      <FlatList data={Data} keyExtractor={(item) => item.value} renderItem={renderItem} horizontal showsHorizontalScrollIndicator={false} />
+      {/* Display the items from the Data array */}
+      <FlatList
+        data={Data}
+        keyExtractor={(item) => item.value.toString()}
+        renderItem={renderItem}
+        horizontal
+        showsHorizontalScrollIndicator={false}
+      />
     </ScrollView>
   );
 };
@@ -89,30 +124,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     backgroundColor: "white",
   },
-  container2: {
+  headerContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingVertical: 15,
+  },
+  cartButton: {
     alignItems: "center",
-  },
-  category: {
-    padding: 15,
-    height: 80,
-    width: 80,
-    borderRadius: 60,
-    backgroundColor: "#F5F5F5",
-    elevation: 7,
-    alignItems: "center",
-    justifyContent: "center",
-    shadowColor: "#000",
-    shadowOpacity: 0.2,
-    shadowOffset: { height: 3, width: 3 },
-  },
-  textInContainer: {
-    fontSize: 16,
-    marginTop: 10,
-  },
-  headerText: {
-    fontSize: 22,
-    fontWeight: "800",
-    marginBottom: 30,
+    flexDirection: "row",
   },
   cartBadge: {
     backgroundColor: "black",
@@ -129,32 +148,51 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 12,
   },
-  card: {
-    height: 200,
-    width: 310,
-    backgroundColor: "#8e8e8e8e",
-    borderRadius: 10,
-    marginEnd: 10,
+  headerText: {
+    fontSize: 22,
+    fontWeight: "800",
+    marginBottom: 30,
   },
-  textInCard: {
-    color: "white",
-    fontSize: 25,
-    fontWeight: "200",
-    width: "65%",
-    marginTop: 20,
-    marginStart: 20,
-  },
-  buttonInCard: {
-    height: 50,
-    width: "45%",
-    backgroundColor: "white",
-    borderRadius: 25,
-    padding: 10,
-    justifyContent: "center",
+  categoriesContainer: {
     alignItems: "center",
-    elevation: 5,
-    marginStart: 15,
-    marginTop: 45,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginHorizontal: 15,
+  },
+  category: {
+    alignItems: "center",
+  },
+  categoryButton: {
+    padding: 15,
+    height: 80,
+    width: 80,
+    borderRadius: 60,
+    backgroundColor: "#F5F5F5",
+    elevation: 7,
+    alignItems: "center",
+    justifyContent: "center",
+    shadowColor: "#000",
+    shadowOpacity: 0.2,
+    shadowOffset: { height: 3, width: 3 },
+  },
+  textInCategory: {
+    fontSize: 16,
+    marginTop: 10,
+  },
+  bannersContainer: {
+    marginBottom: 30,
+  },
+  bannerContainer: {
+    width: 300,
+    height: 150,
+    marginRight: 10,
+    borderRadius: 10,  
+    elevation: 5,     
+    overflow: "hidden", 
+  },
+  banner: {
+    width: 300,
+    height: 150,
   },
 });
 

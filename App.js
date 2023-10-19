@@ -7,7 +7,6 @@ import { createStackNavigator } from "@react-navigation/stack";
 import Home from "./screens/Home";
 import Checkout from "./screens/Checkout";
 import Cart from "./screens/Cart";
-import Verification from "./screens/Verification";
 import OrderComplete from "./screens/OrderComplete";
 import Biometric from "./screens/Biometric";
 import Item from "./components/Item";
@@ -21,8 +20,7 @@ export default function App() {
         <Stack.Screen name="Item" component={Item} />
         <Stack.Screen name="Checkout" component={Checkout} />
         <Stack.Screen name="Cart" component={Cart} />
-        <Stack.Screen name="Verification" component={Verification} />
-        <Stack.Screen name="Order Complete" component={OrderComplete} />
+        <Stack.Screen name="OrderComplete" component={OrderComplete} />
         <Stack.Screen name="Biometric" component={Biometric} />
       </Stack.Navigator>
     </NavigationContainer>
