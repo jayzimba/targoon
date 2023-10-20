@@ -5,6 +5,7 @@ import { TouchableOpacity } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import * as LocalAuthentication from "expo-local-authentication";
 import { useNavigation } from "@react-navigation/native";
+import { Picker } from '@react-native-picker/picker'; // Import Picker from @react-native-picker/picker
 
 const Checkout = () => {
     const navigation = useNavigation();
@@ -67,12 +68,25 @@ const Checkout = () => {
             const [, month, year] = match;
             setExpiryMonth(month);
             setExpiryYear(year);
-        } else {
-            setExpiryMonth(""); // Clear the field if it doesn't match the expected format
-            setExpiryYear("");
         }
 
         setCardNumber(input);
+    };
+
+    const handleExpiryMonthChange = (input) => {
+        if (validateExpiryMonth(input)) {
+            setExpiryMonth(input);
+        } else {
+            Alert.alert("Invalid Expiry Month", "Please enter a valid expiry month (1-12).");
+        }
+    };
+
+    const handleExpiryYearChange = (input) => {
+        if (validateExpiryYear(input)) {
+            setExpiryYear(input);
+        } else {
+            Alert.alert("Invalid Expiry Year", "Please enter a valid expiry year (current year or later).");
+        }
     };
 
     return (
@@ -86,23 +100,35 @@ const Checkout = () => {
             <Text style={styles.label}>Card Number</Text>
             <TextInput style={styles.input} value={cardNumber} onChangeText={handleCardNumberChange} placeholder="Card Number" keyboardType="numeric" secureTextEntry={false} />
 
-            <Text style={styles.label}>Expiry Date</Text>
+            <Text style={styles.label}>Expiry</Text>
             <View style={styles.expiryContainer}>
-                <TextInput
-                    style={styles.picker}
-                    value={expiryMonth}
-                    onChangeText={(text) => setExpiryMonth(text)}
-                    placeholder="MM"
-                    keyboardType="numeric"
-                />
-                <Text style={styles.expiryDivider}>/</Text>
-                <TextInput
-                    style={styles.picker}
-                    value={expiryYear}
-                    onChangeText={(text) => setExpiryYear(text)}
-                    placeholder="YY"
-                    keyboardType="numeric"
-                />
+                <Picker selectedValue={expiryMonth} onValueChange={handleExpiryMonthChange} style={styles.picker}>
+                    <Picker.Item label="Month" value="" />
+                    <Picker.Item label="January" value="01" />
+                    <Picker.Item label="February" value="02" />
+                    <Picker.Item label="March" value="03" />
+                    <Picker.Item label="April" value="04" />
+                    <Picker.Item label="May" value="05" />
+                    <Picker.Item label="June" value="06" />
+                    <Picker.Item label="July" value="07" />
+                    <Picker.Item label="August" value="08" />
+                    <Picker.Item label="September" value="09" />
+                    <Picker.Item label="October" value="10" />
+                    <Picker.Item label="November" value="11" />
+                    <Picker.Item label="December" value="12" />
+                </Picker>
+                <Picker selectedValue={expiryYear} onValueChange={handleExpiryYearChange} style={styles.picker}>
+                    <Picker.Item label="Year" value="" />
+                    <Picker.Item label="2022" value="22" />
+                    <Picker.Item label="2023" value="23" />
+                    <Picker.Item label="2024" value="24" />
+                    <Picker.Item label="2025" value="25" />
+                    <Picker.Item label="2026" value="26" />
+                    <Picker.Item label="2027" value="27" />
+                    <Picker.Item label="2028" value="28" />
+                    <Picker.Item label="2029" value="29" />
+                    <Picker.Item label="2030" value="30" />
+                </Picker>
             </View>
 
             <Text style={styles.label}>CVC</Text>
@@ -154,12 +180,11 @@ const styles = StyleSheet.create({
         alignItems: "center",
         width: "80%",
         borderRadius: 10,
-        backgroundColor: "#000",
+        backgroundColor: "#000", // Remove the duplicate backgroundColor
     },
     expiryContainer: {
         flexDirection: "row",
         justifyContent: "space-between",
-        alignItems: "center",
     },
     picker: {
         flex: 1,
@@ -168,10 +193,6 @@ const styles = StyleSheet.create({
         borderColor: "#ccc",
         borderRadius: 5,
         marginTop: 5,
-    },
-    expiryDivider: {
-        fontSize: 24,
-        marginHorizontal: 5,
     },
 });
 
