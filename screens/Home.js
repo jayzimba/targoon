@@ -17,7 +17,6 @@ const Home = ({ navigation }) => {
   const [cartCounter, setCartCounter] = useState(0);
 
   const Data = [
-    { value: 1, name: "MacBook pro", price: 13000 },
     { value: 2, name: "Pixel 6 pro", price: 10500 },
     { value: 3, name: "Google Glasses", price: 5600 },
   ];
