@@ -30,7 +30,7 @@ const Cart = ({ navigation }) => {
         </View>
     );
 };
-
+9
 const styles = StyleSheet.create({
     container: {
         flex: 1,

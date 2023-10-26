@@ -17,8 +17,12 @@ const Home = ({ navigation }) => {
   const [cartCounter, setCartCounter] = useState(0);
 
   const Data = [
-    { value: 2, name: "Pixel 6 pro", price: 10500 },
-    { value: 3, name: "Google Glasses", price: 5600 },
+    { value: 1, name: "Pixel 6 pro", price: 10500 },
+    { value: 2, name: "Google Glasses", price: 5600 },
+    { value: 3, name: "MacBook Pro", Price: 1200 },
+    { value: 4, name: "Dell Inspirion", Price: 1200 },
+    { value: 5, name: "LG Monitor", Price: 1200 },
+
   ];
 
   const handleButtonPress = (item) => {
