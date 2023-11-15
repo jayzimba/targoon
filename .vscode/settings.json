@@ -1,3 +1,8 @@
 {
-    "sqltools.connections": []
+    "sqltools.connections": [],
+    "workbench.colorCustomizations": {
+        "activityBar.background": "#033516",
+        "titleBar.activeBackground": "#044B1F",
+        "titleBar.activeForeground": "#ECFEF3"
+    }
 }
