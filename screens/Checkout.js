@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { Alert, View, Text, TextInput, Button, StyleSheet, ActivityIndicator } from "react-native";
-import { CardField, CardFieldInput, useConfirmPayment } from "@stripe/stripe-react-native";
+import { CardField, useConfirmPayment } from "@stripe/stripe-react-native";
 import { TouchableOpacity } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import * as LocalAuthentication from "expo-local-authentication";
 import { useNavigation } from "@react-navigation/native";
-import { Picker } from '@react-native-picker/picker'; // Import Picker from @react-native-picker/picker
+import { Picker } from '@react-native-picker/picker';
 
 const Checkout = () => {
     const navigation = useNavigation();
@@ -17,6 +17,16 @@ const Checkout = () => {
     const [cvc, setCvc] = useState("");
     const [loadingIndicator, setLoading] = useState(false);
 
+    const validateCardNumber = (input) => {
+        const cardNumberRegex = /^\d{12}$/;
+        return cardNumberRegex.test(input);
+    };
+
+    const validateCvc = (input) => {
+        const cvcRegex = /^\d{3}$/;
+        return cvcRegex.test(input);
+    };
+
     const validateExpiryMonth = (input) => {
         const month = parseInt(input, 10);
         return month >= 1 && month <= 12;
@@ -27,28 +37,29 @@ const Checkout = () => {
         const year = parseInt(input, 10);
         return year >= currentYear && year <= currentYear + 20;
     };
-
     const authenticateWithBiometrics = async () => {
         const hasBiometrics = await LocalAuthentication.hasHardwareAsync();
         if (hasBiometrics) {
             const result = await LocalAuthentication.authenticateAsync({
                 promptMessage: "Authenticate to pay",
             });
-
+    
             if (result.success) {
                 navigation.navigate("OrderComplete");
             } else {
-                Alert.alert("Biometric Authentication Failed", "Please try again.");
+                Alert.alert(
+                    "Biometric Authentication Failed",
+                    "The transaction is declined. Please make sure that you scan your biometric trait on your device; if this is beyond your control, please contact your bank service provider."
+                );
             }
         } else {
             sendOTP();
         }
         setLoading(false);
     };
-
     const handlePayment = () => {
-        if (!cardNumber || !validateExpiryMonth(expiryMonth) || !validateExpiryYear(expiryYear) || !cvc) {
-            Alert.alert("Invalid Card Details", "Please fill in all card details.");
+        if (!validateCardNumber(cardNumber) || !validateExpiryMonth(expiryMonth) || !validateExpiryYear(expiryYear) || !validateCvc(cvc)) {
+            Alert.alert("Invalid Card Details", "Please fill in all card details correctly.");
             return;
         }
 
@@ -58,18 +69,6 @@ const Checkout = () => {
     };
 
     const handleCardNumberChange = (input) => {
-        if (input.startsWith("4")) {
-            // You can set additional flags or UI hints for Visa card.
-        }
-
-        const expiryRegex = /^(\d{2})\/(\d{2})$/;
-        const match = input.match(expiryRegex);
-        if (match) {
-            const [, month, year] = match;
-            setExpiryMonth(month);
-            setExpiryYear(year);
-        }
-
         setCardNumber(input);
     };
 
@@ -80,7 +79,7 @@ const Checkout = () => {
             Alert.alert("Invalid Expiry Month", "Please enter a valid expiry month (1-12).");
         }
     };
-
+    
     const handleExpiryYearChange = (input) => {
         if (validateExpiryYear(input)) {
             setExpiryYear(input);
@@ -96,10 +95,15 @@ const Checkout = () => {
                 handleCardNumberChange(cardDetails.number);
                 setCvc(cardDetails.cvc);
             }} />
-
             <Text style={styles.label}>Card Number</Text>
-            <TextInput style={styles.input} value={cardNumber} onChangeText={handleCardNumberChange} placeholder="Card Number" keyboardType="numeric" secureTextEntry={false} />
-
+            <TextInput
+                style={styles.input}
+                value={cardNumber}
+                onChangeText={handleCardNumberChange}
+                placeholder="Card Number"
+                keyboardType="numeric"
+                secureTextEntry={false}
+            />
             <Text style={styles.label}>Expiry</Text>
             <View style={styles.expiryContainer}>
                 <Picker selectedValue={expiryMonth} onValueChange={handleExpiryMonthChange} style={styles.picker}>
@@ -130,10 +134,15 @@ const Checkout = () => {
                     <Picker.Item label="2030" value="30" />
                 </Picker>
             </View>
-
             <Text style={styles.label}>CVC</Text>
-            <TextInput style={styles.input} value={cvc} onChangeText={setCvc} placeholder="CVC" keyboardType="numeric" secureTextEntry={true} />
-
+            <TextInput
+                style={styles.input}
+                value={cvc}
+                onChangeText={setCvc}
+                placeholder="CVC"
+                keyboardType="numeric"
+                secureTextEntry={true}
+            />
             <View style={{ width: "100%", alignItems: "center", bottom: 20, marginVertical: 50 }}>
                 <TouchableOpacity style={styles.proceedButton} onPress={handlePayment} disabled={loadingIndicator}>
                     {loadingIndicator ? (
@@ -180,7 +189,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
         width: "80%",
         borderRadius: 10,
-        backgroundColor: "#000", // Remove the duplicate backgroundColor
+        backgroundColor: "#000", 
     },
     expiryContainer: {
         flexDirection: "row",

@@ -4,5 +4,10 @@
         "activityBar.background": "#033516",
         "titleBar.activeBackground": "#044B1F",
         "titleBar.activeForeground": "#ECFEF3"
-    }
+    },
+    "cSpell.words": [
+        "formdata",
+        "fullname",
+        "successfuly"
+    ]
 }

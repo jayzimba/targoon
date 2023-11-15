@@ -7,6 +7,7 @@ import {
   Alert,
   StyleSheet,
   TouchableOpacity,
+  ActivityIndicator,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
@@ -21,7 +22,7 @@ class Registration extends Component {
       email: "",
       password: "",
       loading: false,
-      registeredUser: null,
+      biometricData: null,
     };
   }
 
@@ -29,65 +30,47 @@ class Registration extends Component {
     this.setState({
       loading: true,
     });
-    var fullname = this.state.fullname;
-    var username = this.state.username;
-    var email = this.state.email;
-    var password = this.state.password;
 
-    if (
-      fullname == null ||
-      username == null ||
-      email == null ||
-      password == null
-    ) {
-      Alert.alert("Incomplete form", "please provide all fields");
+    const {
+      fullname,
+      username,
+      email,
+      password,
+      biometricData,
+    } = this.state;
+
+    if (fullname == null || username == null || email == null || password == null) {
+      Alert.alert("Incomplete form", "Please provide all fields");
+      this.setState({ loading: false });
     } else {
-      var formdata = new FormData();
+      const formdata = new FormData();
       formdata.append("fullname", fullname);
       formdata.append("username", username);
       formdata.append("email", email);
       formdata.append("password", password);
+      formdata.append("biometricData", JSON.stringify(biometricData));
 
-      var headers = {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      };
-
-      var requestOptions = {
+      const requestOptions = {
         method: "POST",
         body: formdata,
         redirect: "follow",
       };
 
       try {
-        const response = await fetch(
-          "https://www.pezabond.com/kelly/add_record.php",
-          requestOptions
-        );
+        const response = await fetch("https://www.pezabond.com/kelly/add_record.php", requestOptions);
         const result = await response.json();
 
         alert(result[0].Message);
 
         if (result[0].Message === "Added successfully!") {
-          Alert.alert("SUCCESSFUL!!", "user added successfully");
-          this.setState({
-            registeredUser: {
-              fullname: result[0].FullName,
-              username: result[0].Username,
-            },
-          });
+          Alert.alert("SUCCESSFUL!!", "User added successfully");
+          this.props.navigation.navigate("Home");
         } else if (result[0].Message === "Already Registered") {
-          Alert.alert(
-            "FAILED!!",
-            "Customer already existing with that id"
-          );
+          Alert.alert("FAILED!!", "User already exists with that ID");
         }
       } catch (error) {
-        console.error("ERROR:" + error);
-        Alert.alert(
-          "Network Error",
-          "An error occurred. Please check your network connection and try again."
-        );
+        console.error("ERROR:", error);
+        Alert.alert("Network Error", "An error occurred. Please check your network connection and try again.");
       } finally {
         this.setState({
           fullname: "",
@@ -95,6 +78,7 @@ class Registration extends Component {
           email: "",
           password: "",
           loading: false,
+          biometricData: null,
         });
       }
     }
@@ -104,38 +88,39 @@ class Registration extends Component {
     try {
       const hasHardware = await LocalAuthentication.hasHardwareAsync();
       if (!hasHardware) {
-        Alert.alert(
-          "Biometrics Not Available",
-          "Your device does not support biometric authentication."
-        );
+        Alert.alert("Biometrics Not Available", "Your device does not support biometric authentication.");
         return;
       }
 
-      const isEnrolled = await LocalAuthentication.isEnrolledAsync();
-      if (!isEnrolled) {
-        Alert.alert(
-          "Biometrics Not Enrolled",
-          "You must enroll biometrics in your device settings."
-        );
-        return;
-      }
+      const authType = LocalAuthentication.AuthenticationType.Fingerprint; 
 
       const result = await LocalAuthentication.authenticateAsync({
         promptMessage:
           "Place your finger on the sensor to register your biometrics.",
+        disableDeviceFallback: true, // This will prevent using PIN as fallback
+        authenticationType: authType,
       });
 
       if (result.success) {
-        const biometricData = result.data;
+        // Only store the biometric data, do not perform verification here
+        this.setState({
+          biometricData: result.data,
+        });
+
         Alert.alert(
           "Biometric Enrollment",
           "Your biometric data has been enrolled successfully."
         );
       } else {
-        Alert.alert(
-          "Biometric Enrollment Failed",
-          "Biometric enrollment failed. Please try again."
-        );
+        if (result.error === "user_cancel") {
+          // Handle the case where the user cancels the biometric authentication
+          console.log("Biometric authentication canceled by the user");
+        } else {
+          Alert.alert(
+            "Biometric Enrollment Failed",
+            "Biometric enrollment failed. Please try again."
+          );
+        }
       }
     } catch (error) {
       console.error("Error during biometric enrollment:", error);
@@ -147,8 +132,7 @@ class Registration extends Component {
   };
 
   render() {
-    const { fullname, username, email, password, loading, registeredUser } =
-      this.state;
+    const { fullname, username, email, password, loading } = this.state;
     return (
       <View style={styles.container}>
         <Text style={styles.title}>Registration</Text>
@@ -191,17 +175,7 @@ class Registration extends Component {
             <Text>Register</Text>
           </TouchableOpacity>
         </View>
-        {registeredUser && (
-          <TouchableOpacity
-            style={styles.RegisteredUser}
-            onPress={() => {
-              // Navigate to home screen
-              this.props.navigation.navigate("Home");
-            }}
-          >
-            <Text>Registered User: {registeredUser.username}</Text>
-          </TouchableOpacity>
-        )}
+        {loading && <ActivityIndicator size="large" color="#0000ff" />}
       </View>
     );
   }
@@ -236,8 +210,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#000",
     padding: 15,
     borderRadius: 7,
-    marginVertical: 20
-
+    marginVertical: 20,
   },
   RegButton: {
     borderWidth: 1,
