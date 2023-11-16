@@ -21,7 +21,6 @@ class Registration extends Component {
       email: "",
       password: "",
       loading: false,
-      registeredUser: null,
     };
   }
 
@@ -59,44 +58,28 @@ class Registration extends Component {
         redirect: "follow",
       };
 
-      try {
-        const response = await fetch(
-          "https://www.pezabond.com/kelly/add_record.php",
-          requestOptions
-        );
-        const result = await response.json();
-
-        alert(result[0].Message);
-
-        if (result[0].Message === "Added successfully!") {
-          Alert.alert("SUCCESSFUL!!", "user added successfully");
+      fetch("https://www.pezabond.com/kelly/add_record.php", requestOptions)
+        .then((Response) => Response.json())
+        .then((Response) => {
+          alert(Response[0].Message);
+          if (Response[0].Message == "Added successfuly!") {
+            Alert.alert("SUCCESSFUL!!", "user added successfully");
+            this.props.navigation.navigate("Home");
+          } else if (Response[0].Message == "Already Registered") {
+            Alert.alert("FAILED!!", "Customer already existing with that id");
+          }
+        })
+        .catch((error) => {
+          console.error("ERROR:" + error);
+        })
+        .finally(() =>
           this.setState({
-            registeredUser: {
-              fullname: result[0].FullName,
-              username: result[0].Username,
-            },
-          });
-        } else if (result[0].Message === "Already Registered") {
-          Alert.alert(
-            "FAILED!!",
-            "Customer already existing with that id"
-          );
-        }
-      } catch (error) {
-        console.error("ERROR:" + error);
-        Alert.alert(
-          "Network Error",
-          "An error occurred. Please check your network connection and try again."
+            fullname: "",
+            grade: "",
+            studentID: "",
+            loading: false,
+          })
         );
-      } finally {
-        this.setState({
-          fullname: "",
-          username: "",
-          email: "",
-          password: "",
-          loading: false,
-        });
-      }
     }
   };
 
@@ -147,15 +130,14 @@ class Registration extends Component {
   };
 
   render() {
-    const { fullname, username, email, password, loading, registeredUser } =
-      this.state;
+    const { name, username, email, password, loading } = this.state;
     return (
       <View style={styles.container}>
         <Text style={styles.title}>Registration</Text>
         <TextInput
           style={styles.input}
           placeholder="Full Name"
-          value={fullname}
+          value={name}
           onChangeText={(text) => this.setState({ fullname: text })}
         />
         <TextInput
@@ -191,17 +173,6 @@ class Registration extends Component {
             <Text>Register</Text>
           </TouchableOpacity>
         </View>
-        {registeredUser && (
-          <TouchableOpacity
-            style={styles.RegisteredUser}
-            onPress={() => {
-              // Navigate to home screen
-              this.props.navigation.navigate("Home");
-            }}
-          >
-            <Text>Registered User: {registeredUser.username}</Text>
-          </TouchableOpacity>
-        )}
       </View>
     );
   }
@@ -236,8 +207,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#000",
     padding: 15,
     borderRadius: 7,
-    marginVertical: 20
-
+    marginVertical: 20,
   },
   RegButton: {
     borderWidth: 1,
